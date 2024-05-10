@@ -12,8 +12,6 @@
 
 <body class="d-flex flex-column justify-content-center">
 
-
-    <!-- Modal -->
     <div class="modal fade" id="addAssignment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -53,34 +51,21 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Details</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <form>
-                            <div class="mb-3">
-                                <label for="assignmentName" class="form-label">Name of the Assignment</label>
-                                <input type="text" class="form-control" id="assignmentName"
-                                    aria-describedby="emailHelp">
-                                <div id="assignmentHelp" class="form-text">Make sure the name accurately describes the
-                                    gig.
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="paymentAmount" class="form-label">Amount</label>
-                                <input type="number" class="form-control" placeholder="NPR" id="paymentAmount">
-                            </div>
-
-                            <button type="submit" id="modal-submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </form>
+                <div style="padding: 0;" class="modal-body">
+                    <div class="card" style="width: 100; border: none;">
+                        <img src="https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_960_720.jpg"
+                            style="border-radius: 0" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 id="card-title" class="card-title">Card title</h5>
+                            <p class="card-text">NRS <span id="card-text"></span></p>
+                            <a href="#" class="btn btn-success">Handle</a>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
-
-
-
-
 
     <section class="d-flex flex-row justify-content-between w-100 p-3 ">
 
@@ -94,12 +79,10 @@
             </button>
         </span>
 
+
     </section>
 
-
-
-
-
+    <span><button class="btn btn-danger m-3" id="consoler">Console Log</button></span>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

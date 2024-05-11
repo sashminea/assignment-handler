@@ -12,6 +12,23 @@
 
 <body class="d-flex flex-column justify-content-center">
 
+    <nav class="navbar bg-body-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand">Assignment Handler</a>
+            <form class="d-flex" role="search">
+                <span class="w-100">
+                    <button type="button" id="addButton" class="btn btn-primary">
+                        Add Assignment
+                    </button>
+                </span>
+
+
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
     <div class="modal fade" id="addAssignment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -73,12 +90,6 @@
         </div>
 
         <!-- Button trigger modal -->
-        <span>
-            <button type="button" id="addButton" class="btn btn-primary">
-                Add Assignment
-            </button>
-        </span>
-
 
     </section>
 

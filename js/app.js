@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const assignmentPaymentInput = document.getElementById('paymentAmount');
     const modalSubmit = document.getElementById('modal-submit');
     const cardContainer = document.getElementById('card-container');
-    const assignmentHelp = document.getElementById('assignmentHelp');
+    const assignmentHelp = document.querySelector('#assignmentHelp');
     const cardTitle = document.getElementById('card-title');
     const cardText = document.getElementById('card-text');
     const assignmentList = [];
@@ -28,21 +28,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return element
     }
-
     document.getElementById('addButton').addEventListener("click", () => {
         addAssignment.show();
     });
 
-    modalSubmit.addEventListener("click", function () {
-        event.preventDefault();
-        if (assignmentNameInput.value.length <= 4 || assignmentPaymentInput.value <= 1) {
-            assignmentHelp.innerHTML = `Please fill in the details properly.`;
-            assignmentHelp.style = 'color: red;'
+    modalSubmit.addEventListener("click", function (e) {
+
+        e.preventDefault()
+
+        if (assignmentNameInput.value.length <= 4 || assignmentPaymentInput.value <= 1 || assignmentNameInput.value.length >= 24) {
+            assignmentHelp.innerHTML = `Please fill the Details Properly`;
+            assignmentHelp.style.color = 'red'
+
         } else {
             cardContainer.appendChild(
                 createChild(assignmentPaymentInput.value, assignmentNameInput.value)
             );
-
 
             const buttons = document.querySelectorAll('.handleButton');
 
@@ -53,13 +54,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     cardText.innerHTML = assignmentList[index].value;
                 })
             });
+            addAssignment.hide();
 
         }
 
 
-        addAssignment.hide();
-        assignmentHelp.innerHTML = `Make sure the name accurately describes the gig.`;
-        assignmentHelp.style = 'color: black;'
 
 
         document.getElementById('consoler').addEventListener('click', () => {

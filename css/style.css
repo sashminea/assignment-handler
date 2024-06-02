@@ -1,0 +1,8 @@
+.coverImage {
+    background-image: url(https://semantic-ui.com/images/wireframe/image.png);
+    background-position: center;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-color: #c0bcc4;
+    object-fit: fill;
+}

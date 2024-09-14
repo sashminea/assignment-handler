@@ -1,4 +1,4 @@
-# Assignment Management Project
+# Assignment Handler
 
 This project is a web-based application for managing assignments, allowing users to create, view, edit, and delete assignments through a user-friendly interface. The app utilizes Bootstrap for modals and other UI components.
 

@@ -6,3 +6,7 @@
     background-color: #c0bcc4;
     object-fit: fill;
 }
+
+.profileView {
+    scale: 0.75;
+}

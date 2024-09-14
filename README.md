@@ -1,4 +1,4 @@
-# Assignment Handler
+# Assignment Management Project
 
 This project is a web-based application for managing assignments, allowing users to create, view, edit, and delete assignments through a user-friendly interface. The app utilizes Bootstrap for modals and other UI components.
 
@@ -10,11 +10,23 @@ This project is a web-based application for managing assignments, allowing users
 - **User Profile Management**: Users can set and update their username, profile name, and about section.
 - **Responsive UI**: The application uses Bootstrap for a responsive and sleek user interface.
 
+## Screenshots
+
+
+### Adding Assignment
+![Adding Assignment](https://i.ibb.co/0Qy2nNG/image.png)
+
+### Edit Assignment
+![Edit Assignment](https://i.ibb.co/QcJjbNW/image.png)
+
+### Assignment Details
+![Assignment Details](https://i.ibb.co/BrRJCbz/image.png)
+
 ## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/sashminea/assignment-handler.git
+   git clone https://github.com/your-repo/assignment-management.git
    ```
 
 2. Open the project folder:

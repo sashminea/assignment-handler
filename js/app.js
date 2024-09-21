@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const detailsUser = document.getElementById('detailsUsername');
     const modalSubmit = document.getElementById('modal-submit');
     const assignmentHelp = document.querySelector('#assignmentHelp');
-    const wordLimit = 20;
+    const wordLimit = 26;
     let initialCardID = 0;
 
     // Workspace
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    function createChild(AssValue, AssName, coverPicURL, username, initialCardID, currentDate, AssDescription) {
+    function createChild(AssValue, AssName, coverPicURL, username, initialCardID, currentDate, AssDescription, userPfpURL) {
 
 
 
@@ -117,12 +117,31 @@ document.addEventListener("DOMContentLoaded", function () {
             dots = "...";
         }
 
-        element.innerHTML = `<div id="assignmentCard" class="card" style="width: 18rem;">
+        element.innerHTML = `<div id="assignmentCard" class="card" style="width: 20rem;">
             <img src="${coverPicURL}" style="height: 200px; object-fit: cover; background-position: center" id="newCardCover" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title" id="assignmentCardName">${AssName.slice(0, wordLimit)}${dots}</h5>
-                <p class="card-text"><span class="fw-normal fs-6"><span class="usernamePlace">${usernamePlace.innerHTML}</span><br><span class="assignmentCardAmount">NRS ${AssValue}</span></span></p>
+                <span class="card-full-title d-none">${AssName}</span>
+                <p class="card-text d-flex flex-row gap-2">
+
+                <span class="fw-normal fs-6  overflow-hidden">
+                
+                <img style="width: 44px;height: 44px;object-fit: cover; border-radius: 50%" src = "${userPfpURL}">
+                
+                </span>
+
+                <span class="fw-normal fs-6">
+                
+                <span class="usernamePlace">${usernamePlace.innerHTML}</span><br>
+                <span class="assignmentCardAmount">NRS ${AssValue}</span>
+                
+                </span>
+                
+                </p>
+
+
                 <span id="cardID" style="display: none;">${initialCardID}</span>
+
                 <span class="newModalDate" style="display: none" >${currentDate}</span>
                 <span class="assignmentDescription" style="display: none" >${AssDescription}</span>
                 <span class="d-flex flex-row justify-content-between align-items-center">
@@ -133,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </div>`;
 
-        let newAssignment = { name: AssName, price: AssValue, cover: coverPicURL, user: username, id: initialCardID, date: currentDate, desc: AssDescription };
+        let newAssignment = { name: AssName, price: AssValue, cover: coverPicURL, user: username, id: initialCardID, date: currentDate, desc: AssDescription, uuserPfpURL: userPfpURL };
         assignmentList.push(newAssignment);
         console.log(assignmentList);
         return element;
@@ -156,9 +175,9 @@ document.addEventListener("DOMContentLoaded", function () {
             assignmentHelp.style.color = 'grey';
 
 
+            userPfpURL = coverPfpURL;
 
-
-            const newCard = createChild(assignmentPaymentInput.value, assignmentNameInput.value, coverPicURL, username, initialCardID, currentDate, assignmentDescription.value);
+            const newCard = createChild(assignmentPaymentInput.value, assignmentNameInput.value, coverPicURL, username, initialCardID, currentDate, assignmentDescription.value, userPfpURL);
             cardContainer.appendChild(newCard);
 
 
@@ -184,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Handle Button Event
             newCard.querySelector('.handleButton').addEventListener("click", () => {
                 detailsAssignment.show();
-                document.getElementById('card-title').innerHTML = newCard.querySelector('.card-title').textContent;
+                document.getElementById('card-title').innerHTML = newCard.querySelector('.card-full-title').textContent;
                 document.getElementById('card-text').innerHTML = newCard.querySelector('.assignmentCardAmount').textContent;
                 document.getElementById('detailsCover').src = newCard.querySelector('.card-img-top').src;
                 document.getElementById('detailsUsername').innerHTML = newCard.querySelector('.usernamePlace').textContent.slice(1);
@@ -200,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 // Set placeholders
-                newAssignmentNameInput.placeholder = newCard.querySelector('.card-title').textContent;
+                newAssignmentNameInput.placeholder = newCard.querySelector('.card-full-title').textContent;
                 newAssignmentPayInput.placeholder = newCard.querySelector('.assignmentCardAmount').textContent;
                 newAssignmentDescription.placeholder = newCard.querySelector('.assignmentDescription').textContent;
                 editCoverImage.style.backgroundImage = `url(${newCard.querySelector('.card-img-top').src})`;
@@ -224,12 +243,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     assignmentList[currentCardID] = { name: newName, price: newPay, cover: newCover, user: username, id: currentCardID, desc: newDesc };
 
-                    newCard.querySelector('.card-title').textContent = newName;
+
+                    let dotsEdit = "";
+                    if (newName.length > wordLimit) {
+                        dotsEdit = "..."
+                    }
+
+                    newCard.querySelector('.card-full-title').textContent = newName;
+                    newCard.querySelector('.card-title').textContent = newName.slice(0, wordLimit) + dotsEdit;
+
+
+
                     newCard.querySelector('.assignmentCardAmount').textContent = 'NRS ' + newPay;
                     newCard.querySelector('.card-img-top').src = newCover;
                     newCard.querySelector('.assignmentDescription').textContent = newDesc;
                     console.log(newDesc);
                     editAssignment.hide();
+
                 };
 
                 assignmentDeleter.onclick = function (event) {

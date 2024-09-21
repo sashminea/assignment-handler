@@ -6,12 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
     let name = "Default";
 
 
+
     // Modals
 
     const addAssignment = new bootstrap.Modal('#addAssignment');
     const detailsAssignment = new bootstrap.Modal("#detailsAssignment")
     const editAssignment = new bootstrap.Modal('#editAssignment');
     const profileDetails = new bootstrap.Modal('#profileDetails');
+    let detailsPfp = document.getElementById('detailsPfp');
 
     // Add Assignment
 
@@ -54,6 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const profileViewer = document.getElementById('profileViewer');
     const profileDetailsUsername = document.getElementById('profileDetailsUsername');
     const profileDetailsName = document.getElementById('profileDetailsName');
+    const pfpInput = document.getElementById('pfp');
+    const coverPfp = document.getElementById('coverPfp');
+    let coverPfpURL = `https://static.wikia.nocookie.net/a6dd25e3-8f76-48be-84b9-1656e19682c7/scale-to-width/755`;
 
     // Edit Assignments
 
@@ -69,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const namePlace = document.getElementById('namePlace');
     const usernamePlace = document.getElementById('usernamePlace');
+    let navPfp = document.getElementById('navPfp');
 
     document.getElementById('addButton').addEventListener("click", () => {
         addAssignment.show();
@@ -83,6 +89,17 @@ document.addEventListener("DOMContentLoaded", function () {
             coverPicURL = coverUrl;
         }
     }
+
+    pfpInput.onchange = function profilePictureChanger() {
+        const pfpFile = pfpInput.files[0];
+        if (pfpFile) {
+            const pfpUrl = URL.createObjectURL(pfpFile);
+            coverPfp.src = pfpUrl;
+            coverPfpURL = pfpUrl;
+
+        }
+    }
+
 
 
 
@@ -186,7 +203,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 newAssignmentNameInput.placeholder = newCard.querySelector('.card-title').textContent;
                 newAssignmentPayInput.placeholder = newCard.querySelector('.assignmentCardAmount').textContent;
                 newAssignmentDescription.placeholder = newCard.querySelector('.assignmentDescription').textContent;
-                editCoverImage.style.backgroundImage = newCard.querySelector('.card-img-top').src;
+                editCoverImage.style.backgroundImage = `url(${newCard.querySelector('.card-img-top').src})`;
+                console.log("hey ", newCard.querySelector('.card-img-top').src)
 
                 editCoverInput.onchange = function () {
                     const newCoverFile = editCoverInput.files[0];
@@ -253,6 +271,12 @@ document.addEventListener("DOMContentLoaded", function () {
         about = profileAbout.value;
         profileSettings.hide();
         console.log(username);
+
+
+        navPfp.src = coverPfpURL;
+        detailsPfp.src = coverPfpURL;
+
+
 
         const editButtons = Array.from(document.getElementsByClassName('editButton'))
         editButtons.forEach((element, index) => {

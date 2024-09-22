@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let username = "username";
     let about = "I am so cool.";
     let name = "Default";
-
+    const defaultPfpURL = `https://static.wikia.nocookie.net/a6dd25e3-8f76-48be-84b9-1656e19682c7/scale-to-width/755`;
 
 
     // Modals
@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const editAssignment = new bootstrap.Modal('#editAssignment');
     const profileDetails = new bootstrap.Modal('#profileDetails');
     let detailsPfp = document.getElementById('detailsPfp');
+    let modalDetailsPfp = document.getElementById('modalDetailsPfp');
+    modalDetailsPfp.src = defaultPfpURL;
 
     // Add Assignment
 
@@ -58,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const profileDetailsName = document.getElementById('profileDetailsName');
     const pfpInput = document.getElementById('pfp');
     const coverPfp = document.getElementById('coverPfp');
-    let coverPfpURL = `https://static.wikia.nocookie.net/a6dd25e3-8f76-48be-84b9-1656e19682c7/scale-to-width/755`;
+    let coverPfpURL = defaultPfpURL;
 
     // Edit Assignments
 
@@ -143,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span id="cardID" style="display: none;">${initialCardID}</span>
 
                 <span class="newModalDate" style="display: none" >${currentDate}</span>
-                <span class="assignmentDescription" style="display: none" >${AssDescription}</span>
+                <span class="assignmentDescription d-none" style="" >${AssDescription}</span>
                 <span class="d-flex flex-row justify-content-between align-items-center">
                     <a href="#" class="handleButton btn btn-success">Handle</a>
                     <a href="#" role="button" class="editButton p-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56"/><path d="M6.835 15.803v-2.165c.002-.357.144-.7.395-.953l9.532-9.532a1.362 1.362 0 0 1 1.934 0l2.151 2.151a1.36 1.36 0 0 1 0 1.934l-9.532 9.532a1.361 1.361 0 0 1-.953.395H8.197a1.362 1.362 0 0 1-1.362-1.362M19.09 8.995l-4.085-4.086"/></g></svg></a>
@@ -161,9 +163,33 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add Assignment Starts
     modalSubmit.addEventListener("click", function (e) {
 
+        function formatDate() {
+            const months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
 
-        let newDate = new Date();
-        let currentDate = new Date().toLocaleString();
+            let currentDate = new Date();
+            let day = currentDate.getDate();
+            let month = months[currentDate.getMonth()];
+            let year = currentDate.getFullYear();
+
+            // Add the correct suffix to the day
+            let daySuffix;
+            if (day === 1 || day === 21 || day === 31) {
+                daySuffix = "st";
+            } else if (day === 2 || day === 22) {
+                daySuffix = "nd";
+            } else if (day === 3 || day === 23) {
+                daySuffix = "rd";
+            } else {
+                daySuffix = "th";
+            }
+
+            return `${day}${daySuffix} ${month} ${year}`;
+        }
+
+        let currentDate = formatDate();
 
         e.preventDefault();
         document.getElementsByClassName('recentHeader')[0].innerHTML = "Recently Added";
@@ -206,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById('card-title').innerHTML = newCard.querySelector('.card-full-title').textContent;
                 document.getElementById('card-text').innerHTML = newCard.querySelector('.assignmentCardAmount').textContent;
                 document.getElementById('detailsCover').src = newCard.querySelector('.card-img-top').src;
-                document.getElementById('detailsUsername').innerHTML = newCard.querySelector('.usernamePlace').textContent.slice(1);
+                document.getElementById('detailsUsername').innerHTML = "@" + newCard.querySelector('.usernamePlace').textContent.slice(1);
                 document.getElementById('modalDate').innerHTML = newCard.querySelector('.newModalDate').textContent;
                 document.getElementById('card-description').innerHTML = newCard.querySelector('.assignmentDescription').textContent;
 

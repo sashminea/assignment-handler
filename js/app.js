@@ -79,8 +79,58 @@ document.addEventListener("DOMContentLoaded", function () {
     const usernamePlace = document.getElementById('usernamePlace');
     let navPfp = document.getElementById('navPfp');
 
+    // Tag System
+
+    const tagContainer = document.getElementById('tag-container');
+    const addTagButton = document.getElementById('addTagButton');
+    const allowedTags = 1;
+    let tagsNo = 0;
+
+
+    //Tag System Starts
+    // Function to create and add a new input group
+    function addTag() {
+        console.log("addTag run");
+
+        const div = document.createElement('div');
+        div.classList.add('input-group', 'mb-3');
+
+        div.innerHTML = `
+            <input type="text" class="form-control tag" placeholder="Enter a tag here."
+                   aria-label="Tag" aria-describedby="Tag">
+            <button class="btn btn-outline-secondary tagRemover" type="button">Remove</button>
+        `;
+
+        addTagButton.style.opacity = '0'; // Hide the + button after input is added
+
+        // Add remove functionality for the new tag
+        div.querySelector('.tagRemover').addEventListener('click', function () {
+            div.remove();
+            tagsNo--;
+
+            // Show the + button only if there are no input groups left
+            if (tagContainer.children.length === 0) {
+                addTagButton.style.opacity = '100%';
+                tagsNo = 0;
+            }
+        });
+
+        return div;
+    }
+
+    addTagButton.addEventListener('click', (e) => {
+        if (tagsNo < allowedTags) {
+            const newTag = addTag();
+            tagContainer.appendChild(newTag);
+            tagsNo++;
+
+        }
+    });
+
+
     document.getElementById('addButton').addEventListener("click", () => {
         addAssignment.show();
+
     });
 
     inputCover.onchange = function cardCoverChanger() {
@@ -106,15 +156,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
     function createChild(AssValue, AssName, coverPicURL, username, initialCardID, currentDate, AssDescription, userPfpURL) {
-
-
 
         let element = document.createElement("div");
         let dots = "";
-
-
 
         if (AssName.length > wordLimit) {
             dots = "...";
@@ -161,10 +206,10 @@ document.addEventListener("DOMContentLoaded", function () {
         return element;
     }
 
+
+
     // Add Assignment Starts
     modalSubmit.addEventListener("click", function (e) {
-
-
 
         function formatDate() {
             const months = [
@@ -203,13 +248,10 @@ document.addEventListener("DOMContentLoaded", function () {
             assignmentHelp.innerHTML = `Recommended cover ratio is 3:2`;
             assignmentHelp.style.color = 'grey';
 
-
             userPfpURL = coverPfpURL;
 
             const newCard = createChild(assignmentPaymentInput.value, assignmentNameInput.value, coverPicURL, username, initialCardID, currentDate, assignmentDescription.value, userPfpURL);
             cardContainer.appendChild(newCard);
-
-
 
 
             const editButtons = Array.from(document.getElementsByClassName('editButton'))
@@ -320,6 +362,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             addAssignment.hide();
         }
+
+
     });
 
     // Profile Update Starts

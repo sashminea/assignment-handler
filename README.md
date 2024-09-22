@@ -12,17 +12,14 @@ This project is a web-based application for managing assignments, allowing users
 
 ## Screenshots
 
-### Updated UI
-![Updated UI](https://i.postimg.cc/dVMQmMsN/image.png)
+### New UI (09/23)
+![Assignment Details](https://i.postimg.cc/dVMQmMsN/image.png)
 
 ### Adding Assignment
 ![Adding Assignment](https://i.ibb.co/0Qy2nNG/image.png)
 
 ### Edit Assignment
 ![Edit Assignment](https://i.ibb.co/QcJjbNW/image.png)
-
-### Assignment Details
-![Assignment Details](https://i.ibb.co/BrRJCbz/image.png)
 
 ## Installation
 

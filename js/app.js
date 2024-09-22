@@ -56,7 +56,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const profileUserName = document.getElementById('profileUserName');
     const profileAbout = document.getElementById('profileAbout');
     const profileViewer = document.getElementById('profileViewer');
-    const profileDetailsUsername = document.getElementById('profileDetailsUsername');
+    let profileDetailsUsername = document.getElementById('profileDetailsUsername');
+    profileDetailsUsername.innerHTML = "@username"
     const profileDetailsName = document.getElementById('profileDetailsName');
     const pfpInput = document.getElementById('pfp');
     const coverPfp = document.getElementById('coverPfp');
@@ -128,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <span class="fw-normal fs-6  overflow-hidden">
                 
-                <img style="width: 44px;height: 44px;object-fit: cover; border-radius: 50%" src = "${userPfpURL}">
+                <img class="cardPfp" style="width: 44px;height: 44px;object-fit: cover; border-radius: 50%" src = "${userPfpURL}">
                 
                 </span>
 
@@ -162,6 +163,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add Assignment Starts
     modalSubmit.addEventListener("click", function (e) {
+
+
 
         function formatDate() {
             const months = [
@@ -236,7 +239,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById('modalDate').innerHTML = newCard.querySelector('.newModalDate').textContent;
                 document.getElementById('card-description').innerHTML = newCard.querySelector('.assignmentDescription').textContent;
 
-                console.log(newCard.querySelector('.newModalDate').textContent);
+                console.log(newCard.querySelector('.usernamePlace').textContent);
+                console.log(document.getElementById('profileDetailsUsername').textContent);
+
+                // if (newCard.querySelector('.usernamePlace').textContent === document.getElementById('profileDetailsUsername').textContent) {
+                //     modalDetailsPfp.src = userPfpURL;
+                //     console.log("hi");
+                // }
+
+                const handleButtons = Array.from(document.getElementsByClassName('handleButton'))
+                handleButtons.forEach((element, index) => {
+
+                    if (document.getElementById('profileDetailsUsername').textContent === assignmentList[index].user) {
+                        modalDetailsPfp.src = userPfpURL;
+                        console.log("hi");
+                    }
+                    else {
+                        modalDetailsPfp.src = newCard.querySelector('.cardPfp').src;
+                    }
+
+                });
             });
 
             // Edit Button Event
@@ -300,29 +322,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-
-    // let myNewCard;
-
-    // console.log(assignmentList);
-    // assignmentList.forEach((card, index) => {
-    //     myNewCard = createChild(card.price, card.name, card.cover, card.user, card.id);
-    //     myCardContainer.appendChild(myNewCard);
-    // });
-
-    // Handle Button Event
-    // myNewCard.querySelector('.handleButton').addEventListener("click", () => {
-    //     detailsAssignment.show();
-    //     document.getElementById('card-title').innerHTML = myNewCard.querySelector('.card-title').textContent;
-    //     document.getElementById('card-text').innerHTML = myNewCard.querySelector('.assignmentCardAmount').textContent;
-    //     document.getElementById('detailsCover').src = myNewCard.querySelector('.card-img-top').src;
-    //     document.getElementById('detailsUsername').innerHTML = myNewCard.querySelector('.usernamePlace').textContent.slice(1);;
-    // });
-
     // Profile Update Starts
     profileSave.addEventListener('click', function (e) {
         usernamePlace.innerHTML = '@' + profileUserName.value;
         namePlace.innerHTML = profileName.value;
         username = profileUserName.value;
+        profileDetailsUsername.innerHTML = '@' + profileUserName.value;
         name = profileName.value;
         about = profileAbout.value;
         profileSettings.hide();
@@ -331,6 +336,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         navPfp.src = coverPfpURL;
         detailsPfp.src = coverPfpURL;
+        userPfpURL = coverPfpURL;
 
 
 

@@ -12,6 +12,8 @@ This project is a web-based application for managing assignments, allowing users
 
 ## Screenshots
 
+### Updated UI
+![Updated UI](https://i.postimg.cc/dVMQmMsN/image.png)
 
 ### Adding Assignment
 ![Adding Assignment](https://i.ibb.co/0Qy2nNG/image.png)

@@ -25,7 +25,7 @@ This project is a web-based application for managing assignments, allowing users
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/assignment-management.git
+   git clone https://github.com/sashminea/assignment-management.git
    ```
 
 2. Open the project folder:

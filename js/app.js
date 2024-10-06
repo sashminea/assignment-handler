@@ -89,8 +89,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let tagFlag = 0; // 0 is ok -> ok means flag can be made and it wont be repeated
     const allowedTags = 1; // No. of input groups or inputs tags
     let tagsNo = 0; // No. of active input groups i.e no of input groups created
-    let selectedTag;
-    let tagHover = 0; // Active tag off (0)
+    let isTag = false; // Active tag off (0)
+
 
     //Tag System Starts
     // Function to create and add a new input group
@@ -217,13 +217,64 @@ document.addEventListener("DOMContentLoaded", function () {
         let tagButton = document.createElement("div");
         
        tagButton.innerHTML = `<div>
-              <button type="button" class="btn btn-light" id="tagElement">${tag}</button>
+              <button type="button" class="btn btn-light tagElement">${tag}</button>
         </div>`;
 
 
         tagList.push(tag);
 
         return tagButton;
+    }
+
+    
+    function activeIndicator(t) {
+            if(!isTag) {
+            t.classList.add('active');
+            console.log("function run -->" + t);
+            hideAllElse(t.innerHTML);
+            isTag = true;// a tag is selected
+
+            t.addEventListener('click', ()=> {
+                inactiveIndicator(t);
+            })
+        }
+    }
+
+    function inactiveIndicator(t) {
+        if(isTag){
+        t.classList.remove('active');
+        showAllCards();
+        isTag = false;
+        
+        t.addEventListener('click', ()=> {
+            activeIndicator(t);
+        })
+        }
+    }
+
+
+
+    function hideAllElse(currentTag) {
+        const cardList = document.querySelectorAll('#assignmentCard');
+        for(let i = 0; i < cardList.length; i++)
+        {
+            if(cardList[i].querySelector('.assignmentTag').innerHTML !== currentTag){
+            cardList[i].style.display = 'none';
+            }
+        }
+        
+    }
+
+    function showAllCards() {
+        const cardList = document.querySelectorAll('#assignmentCard');
+        console.log(
+                'function working'
+            )
+        for(let i = 0; i < cardList.length; i++)
+        {
+            cardList[i].style.display = 'block';
+            
+        }
     }
  
     // Add Assignment Starts
@@ -274,67 +325,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
             newTag.forEach(tagInput => {
 
-    // Only proceed if tagsNo > 0 to avoid NULL in tagList
-    if(tagsNo > 0) {
+            // Only proceed if tagsNo > 0 to avoid NULL in tagList
+            if(tagsNo > 0) {
 
-        currentTag = tagInput.value;
-        tagFlag = 0; // Reset flag for each tag
+                currentTag = tagInput.value;
+                tagFlag = 0; // Reset flag for each tag
 
-        // Check if the current tag already exists in the tagList
-        for (let i = 0; i < tagList.length; i++) {
-            if (tagList[i] === currentTag) {
-                tagFlag = 1; // If tag exists, don't append it again
-            }
-        }
-
-        // If the tag doesn't exist, create a new one
-        if (tagFlag === 0) {
-            tagsContainter.append(createTag(currentTag));
-
-            // Fetch all newly created tags
-            tagElements = document.querySelectorAll('#tagElement');
-
-            tagElements.forEach(t => {
-
-                t.addEventListener('click', (e) => {
-                    selectedTag = t.innerHTML;
-
-                    // tagHover === 0 means the tag is currently OFF, so we enable it
-                    if (tagHover === 0) {
-                        e.preventDefault();
-                        t.classList.add('active');
-                        tagHover = 1;
-
-                        let assignmentCards = document.querySelectorAll('#assignmentCard');
-
-                        for (let i = 0; i < assignmentCards.length; i++) {
-                            // Hide cards that don't match the selected tag
-                            if (assignmentCards[i].querySelector('.assignmentTag').innerHTML !== selectedTag) {
-                                assignmentCards[i].style.display = 'none';
-                                console.log(`Hiding card, as it does not match the selected tag`);
-                            } else {
-                                assignmentCards[i].style.display = 'block'; // Show the matching card
-                            }
-                        }
-
-                    // tagHover === 1 means the tag is currently ON, so we disable it
-                    } else {
-                        e.preventDefault();
-                        t.classList.remove('active');
-                        tagHover = 0;
-
-                        let assignmentCards = document.querySelectorAll('#assignmentCard');
-
-                        for (let i = 0; i < assignmentCards.length; i++) {
-                            // Show all cards again when the tag is deselected
-                            assignmentCards[i].style.display = 'block';
-                            console.log(`Showing all cards`);
-                        }
+                // Check if the current tag already exists in the tagList
+                for (let i = 0; i < tagList.length; i++) {
+                    if (tagList[i] === currentTag) {
+                        tagFlag = 1; // If tag exists, don't append it again
                     }
-                });
-            });
-        }
-    }
+                }
+
+                // If the tag doesn't exist, create a new one
+                if (tagFlag === 0) {
+                    tagsContainter.append(createTag(currentTag));
+
+                    const tagElements = document.querySelectorAll('.tagElement');
+
+                    tagElements.forEach(t => {
+                         
+                        t.addEventListener('click', (t) =>
+                    {
+                        activeIndicator(t.currentTarget);
+                    })
+
+                    })
+                    
+                }
+            }
 });
 
 
@@ -375,8 +395,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById('detailsUsername').innerHTML = "@" + newCard.querySelector('.usernamePlace').textContent.slice(1);
                 document.getElementById('modalDate').innerHTML = newCard.querySelector('.newModalDate').textContent;
                 document.getElementById('card-description').innerHTML = newCard.querySelector('.assignmentDescription').textContent;
-
-          
 
                 // if (newCard.querySelector('.usernamePlace').textContent === document.getElementById('profileDetailsUsername').textContent) {
                 //     modalDetailsPfp.src = userPfpURL;
@@ -443,17 +461,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 assignmentDeleter.onclick = function (event) {
                     editAssignment.hide();
-                    newCard.style = `display: none`;
+                    newCard.remove();
                 }
             });
 
             addAssignment.hide();
 
-
         }
 
 
     });
+
 
     // Profile Update Starts
     profileSave.addEventListener('click', function (e) {

@@ -81,23 +81,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Tag System
 
-    const tagContainer = document.getElementById('tag-container');
+    const tagContainer = document.getElementById('tag-container'); // Initial add assignment form tag container
     const addTagButton = document.getElementById('addTagButton');
-    const allowedTags = 1;
-    let tagsNo = 0;
-
+    let currentTag;
+    const tagsContainter  = document.getElementById('tags-container'); // Final workspace tag container
+    let tagList = [];
+    let tagFlag = 0; // 0 is ok -> ok means flag can be made and it wont be repeated
+    const allowedTags = 1; // No. of input groups or inputs tags
+    let tagsNo = 0; // No. of active input groups i.e no of input groups created
+    let selectedTag;
+    let tagHover = 0; // Active tag off (0)
 
     //Tag System Starts
     // Function to create and add a new input group
+    // Tag Element Create Functon
     function addTag() {
-        console.log("addTag run");
 
+        tagsNo++;
         const div = document.createElement('div');
         div.classList.add('input-group', 'mb-3');
 
         div.innerHTML = `
             <input type="text" class="form-control tag" placeholder="Enter a tag here."
-                   aria-label="Tag" aria-describedby="Tag">
+                   aria-label="Tag" id="newTag" aria-describedby="Tag">
             <button class="btn btn-outline-secondary tagRemover" type="button">Remove</button>
         `;
 
@@ -112,25 +118,25 @@ document.addEventListener("DOMContentLoaded", function () {
             if (tagContainer.children.length === 0) {
                 addTagButton.style.opacity = '100%';
                 tagsNo = 0;
+                tagFlag = 0;
             }
         });
-
+        
         return div;
     }
+
+
 
     addTagButton.addEventListener('click', (e) => {
         if (tagsNo < allowedTags) {
             const newTag = addTag();
-            tagContainer.appendChild(newTag);
-            tagsNo++;
-
+            tagContainer.appendChild(newTag); // Input group add tag
         }
     });
 
-
+    // Add Assignment Button ON CLICK, NOT submit function
     document.getElementById('addButton').addEventListener("click", () => {
         addAssignment.show();
-
     });
 
     inputCover.onchange = function cardCoverChanger() {
@@ -153,19 +159,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-
-
-
-    function createChild(AssValue, AssName, coverPicURL, username, initialCardID, currentDate, AssDescription, userPfpURL) {
+    function createChild(AssValue, AssName, coverPicURL, username, initialCardID, currentDate, AssDescription, userPfpURL, tag) {
 
         let element = document.createElement("div");
+        element.id = "assignmentCard";
         let dots = "";
 
         if (AssName.length > wordLimit) {
             dots = "...";
         }
 
-        element.innerHTML = `<div id="assignmentCard" class="card" style="width: 20rem;">
+        element.innerHTML = `<div class="card" style="width: 20rem;">
             <img src="${coverPicURL}" style="height: 200px; object-fit: cover; background-position: center" id="newCardCover" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title" id="assignmentCardName">${AssName.slice(0, wordLimit)}${dots}</h5>
@@ -192,6 +196,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <span class="newModalDate" style="display: none" >${currentDate}</span>
                 <span class="assignmentDescription d-none" style="" >${AssDescription}</span>
+                
+                <span class="assignmentTag d-none" style="" >${tag}</span>
                 <span class="d-flex flex-row justify-content-between align-items-center">
                     <a href="#" class="handleButton btn btn-success">Handle</a>
                     <a href="#" role="button" class="editButton p-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56"/><path d="M6.835 15.803v-2.165c.002-.357.144-.7.395-.953l9.532-9.532a1.362 1.362 0 0 1 1.934 0l2.151 2.151a1.36 1.36 0 0 1 0 1.934l-9.532 9.532a1.361 1.361 0 0 1-.953.395H8.197a1.362 1.362 0 0 1-1.362-1.362M19.09 8.995l-4.085-4.086"/></g></svg></a>
@@ -200,16 +206,30 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </div>`;
 
-        let newAssignment = { name: AssName, price: AssValue, cover: coverPicURL, user: username, id: initialCardID, date: currentDate, desc: AssDescription, uuserPfpURL: userPfpURL };
+        let newAssignment = { name: AssName, price: AssValue, cover: coverPicURL, user: username, id: initialCardID, date: currentDate, desc: AssDescription, userPfpURL: userPfpURL, tag: tag };
         assignmentList.push(newAssignment);
-        console.log(assignmentList);
+
         return element;
     }
 
+    function createTag(tag) {
+        tagFlag = 0;
+        let tagButton = document.createElement("div");
+        
+       tagButton.innerHTML = `<div>
+              <button type="button" class="btn btn-light" id="tagElement">${tag}</button>
+        </div>`;
 
 
+        tagList.push(tag);
+
+        return tagButton;
+    }
+ 
     // Add Assignment Starts
     modalSubmit.addEventListener("click", function (e) {
+
+        e.preventDefault();       
 
         function formatDate() {
             const months = [
@@ -240,23 +260,99 @@ document.addEventListener("DOMContentLoaded", function () {
         let currentDate = formatDate();
 
         e.preventDefault();
+
         document.getElementsByClassName('recentHeader')[0].innerHTML = "Recently Added";
+
         if (assignmentNameInput.value.length < 1 || assignmentPaymentInput.value <= 1) {
             assignmentHelp.innerHTML = `Fill in the details.`;
             assignmentHelp.style.color = 'red';
         } else {
+
+                    // newTag is Input form            
+            let newTag = document.querySelectorAll('#newTag')
+
+
+            newTag.forEach(tagInput => {
+
+    // Only proceed if tagsNo > 0 to avoid NULL in tagList
+    if(tagsNo > 0) {
+
+        currentTag = tagInput.value;
+        tagFlag = 0; // Reset flag for each tag
+
+        // Check if the current tag already exists in the tagList
+        for (let i = 0; i < tagList.length; i++) {
+            if (tagList[i] === currentTag) {
+                tagFlag = 1; // If tag exists, don't append it again
+            }
+        }
+
+        // If the tag doesn't exist, create a new one
+        if (tagFlag === 0) {
+            tagsContainter.append(createTag(currentTag));
+
+            // Fetch all newly created tags
+            tagElements = document.querySelectorAll('#tagElement');
+
+            tagElements.forEach(t => {
+
+                t.addEventListener('click', (e) => {
+                    selectedTag = t.innerHTML;
+
+                    // tagHover === 0 means the tag is currently OFF, so we enable it
+                    if (tagHover === 0) {
+                        e.preventDefault();
+                        t.classList.add('active');
+                        tagHover = 1;
+
+                        let assignmentCards = document.querySelectorAll('#assignmentCard');
+
+                        for (let i = 0; i < assignmentCards.length; i++) {
+                            // Hide cards that don't match the selected tag
+                            if (assignmentCards[i].querySelector('.assignmentTag').innerHTML !== selectedTag) {
+                                assignmentCards[i].style.display = 'none';
+                                console.log(`Hiding card, as it does not match the selected tag`);
+                            } else {
+                                assignmentCards[i].style.display = 'block'; // Show the matching card
+                            }
+                        }
+
+                    // tagHover === 1 means the tag is currently ON, so we disable it
+                    } else {
+                        e.preventDefault();
+                        t.classList.remove('active');
+                        tagHover = 0;
+
+                        let assignmentCards = document.querySelectorAll('#assignmentCard');
+
+                        for (let i = 0; i < assignmentCards.length; i++) {
+                            // Show all cards again when the tag is deselected
+                            assignmentCards[i].style.display = 'block';
+                            console.log(`Showing all cards`);
+                        }
+                    }
+                });
+            });
+        }
+    }
+});
+
+
+                         
             assignmentHelp.innerHTML = `Recommended cover ratio is 3:2`;
             assignmentHelp.style.color = 'grey';
 
+        
             userPfpURL = coverPfpURL;
-
-            const newCard = createChild(assignmentPaymentInput.value, assignmentNameInput.value, coverPicURL, username, initialCardID, currentDate, assignmentDescription.value, userPfpURL);
+    
+            
+            const newCard = createChild(assignmentPaymentInput.value, assignmentNameInput.value, coverPicURL, username, initialCardID, currentDate, assignmentDescription.value, userPfpURL, currentTag);
             cardContainer.appendChild(newCard);
 
 
             const editButtons = Array.from(document.getElementsByClassName('editButton'))
             editButtons.forEach((element, index) => {
-                console.log(username, assignmentList[index].user);
+        
 
                 if (username == assignmentList[index].user) {
                     element.style.display = "block";
@@ -264,7 +360,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 else {
                     element.style.display = "none";
                 }
-
             });
 
 
@@ -281,12 +376,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById('modalDate').innerHTML = newCard.querySelector('.newModalDate').textContent;
                 document.getElementById('card-description').innerHTML = newCard.querySelector('.assignmentDescription').textContent;
 
-                console.log(newCard.querySelector('.usernamePlace').textContent);
-                console.log(document.getElementById('profileDetailsUsername').textContent);
+          
 
                 // if (newCard.querySelector('.usernamePlace').textContent === document.getElementById('profileDetailsUsername').textContent) {
                 //     modalDetailsPfp.src = userPfpURL;
-                //     console.log("hi");
+ 
                 // }
 
                 const handleButtons = Array.from(document.getElementsByClassName('handleButton'))
@@ -294,7 +388,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     if (document.getElementById('profileDetailsUsername').textContent === assignmentList[index].user) {
                         modalDetailsPfp.src = userPfpURL;
-                        console.log("hi");
+
                     }
                     else {
                         modalDetailsPfp.src = newCard.querySelector('.cardPfp').src;
@@ -313,8 +407,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 newAssignmentPayInput.placeholder = newCard.querySelector('.assignmentCardAmount').textContent;
                 newAssignmentDescription.placeholder = newCard.querySelector('.assignmentDescription').textContent;
                 editCoverImage.style.backgroundImage = `url(${newCard.querySelector('.card-img-top').src})`;
-                console.log("hey ", newCard.querySelector('.card-img-top').src)
-
+        
                 editCoverInput.onchange = function () {
                     const newCoverFile = editCoverInput.files[0];
                     if (newCoverFile) {
@@ -333,7 +426,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     assignmentList[currentCardID] = { name: newName, price: newPay, cover: newCover, user: username, id: currentCardID, desc: newDesc };
 
-
                     let dotsEdit = "";
                     if (newName.length > wordLimit) {
                         dotsEdit = "..."
@@ -341,13 +433,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     newCard.querySelector('.card-full-title').textContent = newName;
                     newCard.querySelector('.card-title').textContent = newName.slice(0, wordLimit) + dotsEdit;
-
-
-
                     newCard.querySelector('.assignmentCardAmount').textContent = 'NRS ' + newPay;
                     newCard.querySelector('.card-img-top').src = newCover;
                     newCard.querySelector('.assignmentDescription').textContent = newDesc;
-                    console.log(newDesc);
+
                     editAssignment.hide();
 
                 };
@@ -358,9 +447,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-
-
             addAssignment.hide();
+
+
         }
 
 
@@ -375,19 +464,15 @@ document.addEventListener("DOMContentLoaded", function () {
         name = profileName.value;
         about = profileAbout.value;
         profileSettings.hide();
-        console.log(username);
-
+ 
 
         navPfp.src = coverPfpURL;
         detailsPfp.src = coverPfpURL;
         userPfpURL = coverPfpURL;
 
-
-
         const editButtons = Array.from(document.getElementsByClassName('editButton'))
         editButtons.forEach((element, index) => {
-            console.log(username, assignmentList[index].user, assignmentList);
-
+    
             if (username == assignmentList[index].user) {
                 element.style.display = "block";
             }

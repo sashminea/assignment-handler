@@ -89,8 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let tagFlag = 0; // 0 is ok -> ok means flag can be made and it wont be repeated
     const allowedTags = 1; // No. of input groups or inputs tags
     let tagsNo = 0; // No. of active input groups i.e no of input groups created
-    let isTag = false; // Active tag off (0)
-
+    let tagResetFlag = 9; // tag is set as reset so no tag
 
     //Tag System Starts
     // Function to create and add a new input group
@@ -99,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         tagsNo++;
         const div = document.createElement('div');
+        tagResetFlag = 0;
         div.classList.add('input-group', 'mb-3');
 
         div.innerHTML = `
@@ -113,6 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
         div.querySelector('.tagRemover').addEventListener('click', function () {
             div.remove();
             tagsNo--;
+            tagResetFlag = 1;
+
 
             // Show the + button only if there are no input groups left
             if (tagContainer.children.length === 0) {
@@ -164,6 +166,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let element = document.createElement("div");
         element.id = "assignmentCard";
         let dots = "";
+
+        if(tagResetFlag === 1){
+            tag = '';
+        }
 
         if (AssName.length > wordLimit) {
             dots = "...";
@@ -228,31 +234,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
     function activeIndicator(t) {
-            if(!isTag) {
-            t.classList.add('active');
-            console.log("function run -->" + t);
-            hideAllElse(t.innerHTML);
-            isTag = true;// a tag is selected
+            
+                t.classList.add('active');
+                console.log("function run -->" + t);
+                hideAllElse(t.innerHTML);
+               
 
-            t.addEventListener('click', ()=> {
-                inactiveIndicator(t);
-            })
-        }
+                t.addEventListener('click', ()=> {
+                  
+                    inactiveIndicator(t);
+                })
+        
     }
 
     function inactiveIndicator(t) {
-        if(isTag){
-        t.classList.remove('active');
-        showAllCards();
-        isTag = false;
+  
+            t.classList.remove('active');
+            showAllCards();
+            
+            
+            t.addEventListener('click', ()=> {
+                activeIndicator(t);
+            })
         
-        t.addEventListener('click', ()=> {
-            activeIndicator(t);
-        })
-        }
     }
-
-
 
     function hideAllElse(currentTag) {
         const cardList = document.querySelectorAll('#assignmentCard');

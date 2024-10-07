@@ -1,13 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Data
-
     let username = "username";
     let about = "I am so cool.";
     let name = "Default";
     const defaultPfpURL = `https://static.wikia.nocookie.net/a6dd25e3-8f76-48be-84b9-1656e19682c7/scale-to-width/755`;
-
-
-    // Modals
 
     const addAssignment = new bootstrap.Modal('#addAssignment');
     const detailsAssignment = new bootstrap.Modal("#detailsAssignment")
@@ -16,8 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let detailsPfp = document.getElementById('detailsPfp');
     let modalDetailsPfp = document.getElementById('modalDetailsPfp');
     modalDetailsPfp.src = defaultPfpURL;
-
-    // Add Assignment
 
     const assignmentNameInput = document.getElementById('assignmentName');
     const assignmentPaymentInput = document.getElementById('paymentAmount');
@@ -28,27 +21,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const wordLimit = 26;
     let initialCardID = 0;
 
-    // Workspace
-
     const cardContainer = document.getElementById('card-container');
     const myCardContainer = document.getElementById('myCards');
-
-    // Workspace Card
 
     const cardTitle = document.getElementById('card-title');
     const cardText = document.getElementById('card-text');
     const cardDescription = document.getElementById('card-description');
-    let assignmentList = [
-
-    ];
+    let assignmentList = [];
     const inputCover = document.getElementById('input-cover');
     const coverPic = document.getElementById('cover-pic')
     let coverPicURL = 'https://semantic-ui.com/images/wireframe/image.png';
 
     const newCardCover = document.getElementById('newCardCover');
     const detailsCover = document.getElementById('detailsCover')
-
-    // Modal Profile Settings Elements
 
     const profileSettings = new bootstrap.Modal('#staticBackdrop');
     const profileSave = document.getElementById('profileSave');
@@ -63,8 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const coverPfp = document.getElementById('coverPfp');
     let coverPfpURL = defaultPfpURL;
 
-    // Edit Assignments
-
     const newAssignmentNameInput = document.getElementById('newAssignmentName');
     const newAssignmentPayInput = document.getElementById('newPaymentAmount');
     const newAssignmentDescription = document.getElementById('newDescription');
@@ -73,29 +56,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const editSubmit = document.getElementById('edit-submit');
     const assignmentDeleter = document.getElementById('assignmentDeleter');
 
-    // Nav Bar Profile Elements ( Profile Details )
-
     const namePlace = document.getElementById('namePlace');
     const usernamePlace = document.getElementById('usernamePlace');
     let navPfp = document.getElementById('navPfp');
 
-    // Tag System
-
-    const tagContainer = document.getElementById('tag-container'); // Initial add assignment form tag container
+    const tagContainer = document.getElementById('tag-container');
     const addTagButton = document.getElementById('addTagButton');
     let currentTag;
-    const tagsContainter  = document.getElementById('tags-container'); // Final workspace tag container
+    const tagsContainter  = document.getElementById('tags-container');
     let tagList = [];
-    let tagFlag = 0; // 0 is ok -> ok means flag can be made and it wont be repeated
-    const allowedTags = 1; // No. of input groups or inputs tags
-    let tagsNo = 0; // No. of active input groups i.e no of input groups created
-    let tagResetFlag = 9; // tag is set as reset so no tag
+    let tagFlag = 0;
+    const allowedTags = 1;
+    let tagsNo = 0;
+    let tagResetFlag = 9;
+    let tagClick = 0;
 
-    //Tag System Starts
-    // Function to create and add a new input group
-    // Tag Element Create Functon
     function addTag() {
-
         tagsNo++;
         const div = document.createElement('div');
         tagResetFlag = 0;
@@ -107,16 +83,13 @@ document.addEventListener("DOMContentLoaded", function () {
             <button class="btn btn-outline-secondary tagRemover" type="button">Remove</button>
         `;
 
-        addTagButton.style.opacity = '0'; // Hide the + button after input is added
+        addTagButton.style.opacity = '0';
 
-        // Add remove functionality for the new tag
         div.querySelector('.tagRemover').addEventListener('click', function () {
             div.remove();
             tagsNo--;
             tagResetFlag = 1;
 
-
-            // Show the + button only if there are no input groups left
             if (tagContainer.children.length === 0) {
                 addTagButton.style.opacity = '100%';
                 tagsNo = 0;
@@ -127,16 +100,13 @@ document.addEventListener("DOMContentLoaded", function () {
         return div;
     }
 
-
-
     addTagButton.addEventListener('click', (e) => {
         if (tagsNo < allowedTags) {
             const newTag = addTag();
-            tagContainer.appendChild(newTag); // Input group add tag
+            tagContainer.appendChild(newTag);
         }
     });
 
-    // Add Assignment Button ON CLICK, NOT submit function
     document.getElementById('addButton').addEventListener("click", () => {
         addAssignment.show();
     });
@@ -157,12 +127,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const pfpUrl = URL.createObjectURL(pfpFile);
             coverPfp.src = pfpUrl;
             coverPfpURL = pfpUrl;
-
         }
     }
 
     function createChild(AssValue, AssName, coverPicURL, username, initialCardID, currentDate, AssDescription, userPfpURL, tag) {
-
         let element = document.createElement("div");
         element.id = "assignmentCard";
         let dots = "";
@@ -181,34 +149,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 <h5 class="card-title" id="assignmentCardName">${AssName.slice(0, wordLimit)}${dots}</h5>
                 <span class="card-full-title d-none">${AssName}</span>
                 <p class="card-text d-flex flex-row gap-2">
-
                 <span class="fw-normal fs-6  overflow-hidden">
-                
                 <img class="cardPfp" style="width: 44px;height: 44px;object-fit: cover; border-radius: 50%" src = "${userPfpURL}">
-                
                 </span>
-
                 <span class="fw-normal fs-6">
-                
                 <span class="usernamePlace">${usernamePlace.innerHTML}</span><br>
                 <span class="assignmentCardAmount">NRS ${AssValue}</span>
-                
                 </span>
-                
                 </p>
-
-
                 <span id="cardID" style="display: none;">${initialCardID}</span>
-
                 <span class="newModalDate" style="display: none" >${currentDate}</span>
                 <span class="assignmentDescription d-none" style="" >${AssDescription}</span>
-                
                 <span class="assignmentTag d-none" style="" >${tag}</span>
                 <span class="d-flex flex-row justify-content-between align-items-center">
                     <a href="#" class="handleButton btn btn-success">Handle</a>
                     <a href="#" role="button" class="editButton p-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M19.09 14.441v4.44a2.37 2.37 0 0 1-2.369 2.369H5.12a2.37 2.37 0 0 1-2.369-2.383V7.279a2.356 2.356 0 0 1 2.37-2.37H9.56"/><path d="M6.835 15.803v-2.165c.002-.357.144-.7.395-.953l9.532-9.532a1.362 1.362 0 0 1 1.934 0l2.151 2.151a1.36 1.36 0 0 1 0 1.934l-9.532 9.532a1.361 1.361 0 0 1-.953.395H8.197a1.362 1.362 0 0 1-1.362-1.362M19.09 8.995l-4.085-4.086"/></g></svg></a>
-                    
-                    </span>
+                </span>
             </div>
         </div>`;
 
@@ -219,72 +175,48 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function createTag(tag) {
+
         tagFlag = 0;
         let tagButton = document.createElement("div");
+        tagButton.classList.add('tagElementParent');
         
        tagButton.innerHTML = `<div>
               <button type="button" class="btn btn-light tagElement">${tag}</button>
         </div>`;
-
 
         tagList.push(tag);
 
         return tagButton;
     }
 
-    
-    function activeIndicator(t) {
-            
-                t.classList.add('active');
-                console.log("function run -->" + t);
-                hideAllElse(t.innerHTML);
-               
 
-                t.addEventListener('click', ()=> {
-                  
-                    inactiveIndicator(t);
-                })
-        
+    function activeIndicator(t) {
+        t.classList.add('active');
+        hideAllElseCards(t.innerHTML);
     }
 
     function inactiveIndicator(t) {
-  
-            t.classList.remove('active');
-            showAllCards();
-            
-            
-            t.addEventListener('click', ()=> {
-                activeIndicator(t);
-            })
-        
+        t.classList.remove('active');
+        showAllCards();
     }
 
-    function hideAllElse(currentTag) {
+    function hideAllElseCards(currentTag) {
         const cardList = document.querySelectorAll('#assignmentCard');
-        for(let i = 0; i < cardList.length; i++)
-        {
+        for(let i = 0; i < cardList.length; i++) {
             if(cardList[i].querySelector('.assignmentTag').innerHTML !== currentTag){
-            cardList[i].style.display = 'none';
+                cardList[i].style.display = 'none';
             }
         }
-        
     }
 
     function showAllCards() {
         const cardList = document.querySelectorAll('#assignmentCard');
-        console.log(
-                'function working'
-            )
-        for(let i = 0; i < cardList.length; i++)
-        {
+        for(let i = 0; i < cardList.length; i++) {
             cardList[i].style.display = 'block';
-            
         }
     }
- 
-    // Add Assignment Starts
-    modalSubmit.addEventListener("click", function (e) {
 
+    modalSubmit.addEventListener("click", function (e) {
         e.preventDefault();       
 
         function formatDate() {
@@ -298,7 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
             let month = months[currentDate.getMonth()];
             let year = currentDate.getFullYear();
 
-            // Add the correct suffix to the day
             let daySuffix;
             if (day === 1 || day === 21 || day === 31) {
                 daySuffix = "st";
@@ -315,70 +246,58 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let currentDate = formatDate();
 
-        e.preventDefault();
-
         document.getElementsByClassName('recentHeader')[0].innerHTML = "Recently Added";
 
         if (assignmentNameInput.value.length < 1 || assignmentPaymentInput.value <= 1) {
             assignmentHelp.innerHTML = `Fill in the details.`;
             assignmentHelp.style.color = 'red';
         } else {
-
-                    // newTag is Input form            
             let newTag = document.querySelectorAll('#newTag')
 
-
             newTag.forEach(tagInput => {
+                if(tagsNo > 0) {
+                    currentTag = tagInput.value;
+                    tagFlag = 0;
 
-            // Only proceed if tagsNo > 0 to avoid NULL in tagList
-            if(tagsNo > 0) {
+                    for (let i = 0; i < tagList.length; i++) {
+                        if (tagList[i] === currentTag) {
+                            tagFlag = 1;
+                        }
+                    }
 
-                currentTag = tagInput.value;
-                tagFlag = 0; // Reset flag for each tag
+                    if (tagFlag === 0) {
+                        tagsContainter.append(createTag(currentTag));
+                        
+                        const tagElements = document.querySelectorAll('.tagElement');
+                        const clickCounts = {};
 
-                // Check if the current tag already exists in the tagList
-                for (let i = 0; i < tagList.length; i++) {
-                    if (tagList[i] === currentTag) {
-                        tagFlag = 1; // If tag exists, don't append it again
+                        tagElements.forEach((tagElement, index) => {
+                            clickCounts[index] = 0;
+
+                            tagElement.addEventListener('click', (event) => {
+                                clickCounts[index]++;
+
+                                if (clickCounts[index] % 2 === 1) {
+                                    activeIndicator(event.currentTarget);
+                                } else {
+                                    inactiveIndicator(event.currentTarget);
+                                }
+                            });
+                        });
                     }
                 }
-
-                // If the tag doesn't exist, create a new one
-                if (tagFlag === 0) {
-                    tagsContainter.append(createTag(currentTag));
-
-                    const tagElements = document.querySelectorAll('.tagElement');
-
-                    tagElements.forEach(t => {
-                         
-                        t.addEventListener('click', (t) =>
-                    {
-                        activeIndicator(t.currentTarget);
-                    })
-
-                    })
-                    
-                }
-            }
-});
-
-
+            });
                          
             assignmentHelp.innerHTML = `Recommended cover ratio is 3:2`;
             assignmentHelp.style.color = 'grey';
-
         
             userPfpURL = coverPfpURL;
     
-            
             const newCard = createChild(assignmentPaymentInput.value, assignmentNameInput.value, coverPicURL, username, initialCardID, currentDate, assignmentDescription.value, userPfpURL, currentTag);
             cardContainer.appendChild(newCard);
 
-
             const editButtons = Array.from(document.getElementsByClassName('editButton'))
             editButtons.forEach((element, index) => {
-        
-
                 if (username == assignmentList[index].user) {
                     element.style.display = "block";
                 }
@@ -387,11 +306,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-
-            const currentCardID = initialCardID; // Capture the current card ID for closure
+            const currentCardID = initialCardID;
             initialCardID++;
 
-            // Handle Button Event
             newCard.querySelector('.handleButton').addEventListener("click", () => {
                 detailsAssignment.show();
                 document.getElementById('card-title').innerHTML = newCard.querySelector('.card-full-title').textContent;
@@ -401,31 +318,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById('modalDate').innerHTML = newCard.querySelector('.newModalDate').textContent;
                 document.getElementById('card-description').innerHTML = newCard.querySelector('.assignmentDescription').textContent;
 
-                // if (newCard.querySelector('.usernamePlace').textContent === document.getElementById('profileDetailsUsername').textContent) {
-                //     modalDetailsPfp.src = userPfpURL;
- 
-                // }
-
                 const handleButtons = Array.from(document.getElementsByClassName('handleButton'))
                 handleButtons.forEach((element, index) => {
-
                     if (document.getElementById('profileDetailsUsername').textContent === assignmentList[index].user) {
                         modalDetailsPfp.src = userPfpURL;
-
                     }
                     else {
                         modalDetailsPfp.src = newCard.querySelector('.cardPfp').src;
                     }
-
                 });
             });
 
-            // Edit Button Event
             newCard.querySelector('.editButton').addEventListener('click', () => {
+                
                 editAssignment.show();
 
-
-                // Set placeholders
                 newAssignmentNameInput.placeholder = newCard.querySelector('.card-full-title').textContent;
                 newAssignmentPayInput.placeholder = newCard.querySelector('.assignmentCardAmount').textContent;
                 newAssignmentDescription.placeholder = newCard.querySelector('.assignmentDescription').textContent;
@@ -461,7 +368,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     newCard.querySelector('.assignmentDescription').textContent = newDesc;
 
                     editAssignment.hide();
-
                 };
 
                 assignmentDeleter.onclick = function (event) {
@@ -471,14 +377,9 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             addAssignment.hide();
-
         }
-
-
     });
 
-
-    // Profile Update Starts
     profileSave.addEventListener('click', function (e) {
         usernamePlace.innerHTML = '@' + profileUserName.value;
         namePlace.innerHTML = profileName.value;
@@ -487,7 +388,6 @@ document.addEventListener("DOMContentLoaded", function () {
         name = profileName.value;
         about = profileAbout.value;
         profileSettings.hide();
- 
 
         navPfp.src = coverPfpURL;
         detailsPfp.src = coverPfpURL;
@@ -495,14 +395,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const editButtons = Array.from(document.getElementsByClassName('editButton'))
         editButtons.forEach((element, index) => {
-    
             if (username == assignmentList[index].user) {
                 element.style.display = "block";
             }
             else {
                 element.style.display = "none";
             }
-
         });
     });
 
@@ -512,6 +410,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
         profileDetailsUsername.innerHTML = usernamePlace.textContent;
         profileDetailsName.innerHTML = namePlace.textContent;
-
     });
 });

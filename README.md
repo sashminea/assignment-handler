@@ -1,86 +1,82 @@
-# Assignment Handler
+# 📓 Assignment Handler
 
-This project is a web-based application for managing assignments, allowing users to create, view, edit, and delete assignments through a user-friendly interface. The app utilizes Bootstrap for modals and other UI components.
-
-## Features
-
-- **Add Assignments**: Users can create new assignments, including details such as assignment name, payment amount, description, and cover image.
-- **Edit Assignments**: Users can edit assignment details like name, payment, description, and cover image.
-- **View Assignment Details**: Users can view specific assignment details, including the name, payment, date added, and description.
-- **User Profile Management**: Users can set and update their username, profile name, and about section.
-- **Responsive UI**: The application uses Bootstrap for a responsive and sleek user interface.
-
-## Screenshots
-
-### Added Tags (10/06)
-![Tags](https://i.imgur.com/kgZE9yQ.png)
-
-### New UI (09/23)
-![Assignment Details](https://i.postimg.cc/dVMQmMsN/image.png)
-
-### Adding Assignment
-![Adding Assignment](https://i.ibb.co/0Qy2nNG/image.png)
-
-### Edit Assignment
-![Edit Assignment](https://i.ibb.co/QcJjbNW/image.png)
-
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/sashminea/assignment-management.git
-   ```
-
-2. Open the project folder:
-   ```bash
-   cd assignment-management
-   ```
-
-3. Open `index.html` in your browser to use the application.
-
-## Project Structure
-
-- **HTML**: The project interface is built using HTML and styled with Bootstrap components.
-- **JavaScript**: The logic for handling assignment management, profile updates, and modal interactions is written in JavaScript.
-- **Bootstrap**: Bootstrap is used for styling the modals, buttons, and general layout.
-
-## How to Use
-
-### Adding an Assignment
-
-1. Click the "Add Assignment" button.
-2. Enter the assignment name, payment amount, description, and upload a cover image.
-3. Click the "Submit" button to add the assignment.
-
-### Editing an Assignment
-
-1. Click the edit button (pencil icon) on an assignment card.
-2. Modify the assignment details, including the name, payment, description, or cover image.
-3. Click the "Save" button to update the assignment.
-
-### Viewing Assignment Details
-
-1. Click the "Handle" button on an assignment card.
-2. The modal will display the assignment details including the name, payment, and description.
-
-### Managing Profile
-
-1. Click on your profile to update your username, name, and about section.
-2. Save the changes to update your profile details across the application.
-
-## Dependencies
-
-- [Bootstrap 5](https://getbootstrap.com/)
-- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-
-## Contributing
-
-If you'd like to contribute to this project, feel free to fork the repository and submit a pull request.
-
-## License
-
-This project is licensed under the MIT License.
+**Welcome to the Assignment Handler!** 🎉 This is your all-in-one app for handling assignments like a pro. 💼 From adding tasks to tracking them, we've got you covered. Get ready to stay on top of your work while looking sleek with customizable profiles and even *tags*. 🏷️
 
 ---
 
-Enjoy managing your assignments with this simple yet efficient tool!
+## 💡 Features
+
+- **Add Assignments**: Need to throw in a new task? Use our quick and easy modal to add assignments with a description, payment amount, and a cool cover image. 💸
+  
+- **Edit & Delete Assignments**: Oops! Made a mistake? No worries! You can easily edit or delete assignments. You stay in control. ✏️❌
+
+- **Profile Customization**: Set up your profile with a name, username, and even your very own profile picture. It's your space, make it personal. 🖼️
+
+- **Tags**: Organize your tasks like a boss! Add tags to assignments so you can filter them quickly later. 🚩
+
+- **Responsive UI**: Yep, it’s fully responsive. You can access this bad boy on any device, be it desktop, tablet, or mobile. 📱💻
+
+---
+
+## 🛠️ How to Get Started
+
+1. **Clone this repo**:  
+   ```bash
+   git clone https://github.com/sashminea/assignment-handler.git
+   cd assignment-handler
+   ```
+
+2. **Run the Project**:  
+   Double click on index.html and there you go! Make sure to have internet access for bootstrap and other dependencies.
+
+---
+
+## 🏗️ Project Structure
+
+```
+📁 assignment-manager/
+├── 📂 assets/          # All images, icons, and other assets
+├── 📂 styles/          # CSS files
+├── 📂 scripts/         # JS scripts
+└── index.html          # Main HTML file
+```
+
+---
+
+## 📚 How to Use
+
+- **Adding Assignments**: Click the "Add Assignment" button to open the modal, where you can fill out the name, payment amount, and description. Choose an image for your assignment cover, hit submit, and *bam*, it’s added to your list! 🎯
+
+- **Profile Settings**: You can personalize your experience by updating your profile name, username, and profile picture. Just hit the profile settings button in the navigation. Make it your own! 🖌️
+
+- **Tags**: When creating an assignment, you can add a tag to help categorize it. Use the "Add Tag" button, type in your desired tag, and voila! You can also remove tags when needed. It’s that easy. 🚀
+
+---
+
+## 📸 Screenshots
+
+### 🗒️ Added Tags (10/06)
+![Tags](https://i.imgur.com/kgZE9yQ.png)
+
+### 💻 New UI (09/23)
+![Assignment Details](https://i.postimg.cc/dVMQmMsN/image.png)
+
+### 📒 Adding Assignment
+![Adding Assignment](https://i.ibb.co/0Qy2nNG/image.png)
+
+### 📝 Edit Assignment
+![Edit Assignment](https://i.ibb.co/QcJjbNW/image.png)
+
+---
+
+## 👥 Contributing
+
+Feel like adding a new feature or fixing a bug? Fork the repo, make your changes, and submit a pull request. We welcome all contributions—big or small! 🍕👩‍💻
+
+---
+
+## 📝 License
+
+This project is open-source under the MIT License. Do what you want with it, just don’t forget to drop a star if you like it! ⭐
+
+---

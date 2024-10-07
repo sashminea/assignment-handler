@@ -12,6 +12,9 @@ This project is a web-based application for managing assignments, allowing users
 
 ## Screenshots
 
+### Added Tags (10/06)
+![Tags](https://i.imgur.com/kgZE9yQ.png)
+
 ### New UI (09/23)
 ![Assignment Details](https://i.postimg.cc/dVMQmMsN/image.png)
 

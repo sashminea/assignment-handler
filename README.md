@@ -34,7 +34,7 @@
 ## 🏗️ Project Structure
 
 ```
-📁 assignment-manager/
+📁 assignment-handler/
 ├── 📂 assets/          # All images, icons, and other assets
 ├── 📂 styles/          # CSS files
 ├── 📂 scripts/         # JS scripts

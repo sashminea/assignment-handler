@@ -1,6 +1,6 @@
 # 📓 Assignment Handler
 
-**Welcome to the Assignment Handler!** 🎉 This is your all-in-one app for handling assignments like a pro. 💼 From adding tasks to tracking them, we've got you covered. Get ready to stay on top of your work while looking sleek with customizable profiles and even *tags*. 🏷️
+This is your all-in-one app for handling assignments like a pro. 💼 From adding tasks to tracking them, we've got you covered. Get ready to stay on top of your work while looking sleek with customizable profiles and even *tags*. 🏷️
 
 ---
 

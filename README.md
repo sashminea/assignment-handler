@@ -20,14 +20,26 @@ This is your all-in-one app for handling assignments like a pro. 💼 From addin
 
 ## 🛠️ How to Get Started
 
-1. **Clone this repo**:  
+### 1. Clone this repo:  
    ```bash
    git clone https://github.com/sashminea/assignment-handler.git
    cd assignment-handler
    ```
 
-2. **Run the Project**:  
-   Double click on index.html and there you go! Make sure to have internet access for bootstrap and other dependencies.
+### 2. Install dependencies:  
+   Make sure you have Node.js installed. Run:
+   ```bash
+   npm install
+   ```
+
+### 3. Run the app locally:  
+   To start the server using Express, run:
+   ```bash
+   node server.js
+   ```
+
+### 4. Open in browser:  
+   Navigate to [http://localhost:3000](http://localhost:3000) in your browser to view the app.
 
 ---
 
@@ -35,21 +47,28 @@ This is your all-in-one app for handling assignments like a pro. 💼 From addin
 
 ```
 📁 assignment-handler/
-├── 📂 assets/          # All images, icons, and other assets
-├── 📂 styles/          # CSS files
-├── 📂 scripts/         # JS scripts
-└── index.html          # Main HTML file
+├── 📂 public/         # Contains static files
+│   ├── 📂 css/        # CSS files
+│   ├── 📂 js/         # JavaScript files
+│   └── index.html     # Main HTML file
+│
+├── server.js          # Node.js server file
+└── package.json       # Project metadata and dependencies
+└── package-lock.json  # Dependency tree lock file
 ```
 
 ---
 
 ## 📚 How to Use
 
-- **Adding Assignments**: Click the "Add Assignment" button to open the modal, where you can fill out the name, payment amount, and description. Choose an image for your assignment cover, hit submit, and *bam*, it’s added to your list! 🎯
+### Adding Assignments
+- **Click the "Add Assignment" button** to open the modal. Fill out the name, payment amount, and description. Choose an image for your assignment cover, hit submit, and *bam*, it’s added to your list! 🎯
 
-- **Profile Settings**: You can personalize your experience by updating your profile name, username, and profile picture. Just hit the profile settings button in the navigation. Make it your own! 🖌️
+### Profile Settings
+- **Personalize your experience** by updating your profile name, username, and profile picture. Just hit the profile settings button in the navigation. Make it your own! 🖌️
 
-- **Tags**: When creating an assignment, you can add a tag to help categorize it. Use the "Add Tag" button, type in your desired tag, and voila! You can also remove tags when needed. It’s that easy. 🚀
+### Tags
+- **Use the "Add Tag" button** to categorize your assignments. You can add or remove tags anytime to stay organized! 🚀
 
 ---
 

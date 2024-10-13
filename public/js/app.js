@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const assignmentHelp = document.querySelector('#assignmentHelp');
     const wordLimit = 26;
     let initialCardID = 0;
+    let lastCardID = 0;
 
     const cardContainer = document.getElementById('card-container');
     const myCardContainer = document.getElementById('myCards');
@@ -71,6 +72,45 @@ document.addEventListener("DOMContentLoaded", function () {
     let tagResetFlag = 9;
     let tagClick = 0;
 
+
+    // Fetch API to GET all the assignments
+
+    fetch('/api/assignments')
+        .then(response => {
+            if(!response.ok)
+            {
+                throw new Error('New response was not ok');
+            }
+            return response.json();
+        })
+        .then(assignments => {
+            assignments.forEach(assignment => {
+                const newAssignment = createChild(
+                    assignment.price,
+                    assignment.name,
+                    assignment.cover,
+                    assignment.user,
+                    assignment.cardID,
+                    assignment.date,
+                    assignment.desc,
+                    assignment.pfp,
+                    assignment.tag
+                );
+                cardContainer.appendChild(newAssignment);
+                handleButtonHandler(newAssignment);
+                editButtonHandler(newAssignment);
+                
+                assignment.tag && tagCreator(assignment.tag);
+                console.log();
+                lastCardID = assignments.length; 
+
+                recentHeaderFunction();
+            });
+        })
+        .catch(error => {
+            console.log('Error fetching assignments: ', error);
+        })
+
     function addTag() {
         tagsNo++;
         const div = document.createElement('div');
@@ -98,6 +138,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         
         return div;
+    }
+
+    function recentHeaderFunction ()
+    {
+        if(cardContainer.children.length > 0) { document.getElementsByClassName('recentHeader')[0].innerHTML = "Recently Added"; }
+
+        if(cardContainer.children.length === 0) { document.getElementsByClassName('recentHeader')[0].innerHTML = ""; }
+
     }
 
     addTagButton.addEventListener('click', (e) => {
@@ -134,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let element = document.createElement("div");
         element.id = "assignmentCard";
         let dots = "";
-
+        lastCardID++;
         if(tagResetFlag === 1){
             tag = '';
         }
@@ -188,6 +236,218 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return tagButton;
     }
+
+    function deleteTag(tag) {
+
+        let tagCount = 0;
+        // tag is the tag which is checked for deletion
+        // tagCount is the no of assignmentCards that has the tag
+
+        // if the tagCount is 0 we delete the tag element
+
+        console.log(tag);
+
+        const assignmentCards =  document.querySelectorAll('#assignmentCard');
+        const tags = document.querySelectorAll('.tagElement');
+
+        assignmentCards.forEach(card => {
+
+            if(card.getElementsByClassName('assignmentTag').textContent === tag){
+                tagCount++;
+            }
+            
+        });
+
+        if(tagCount === 0)
+        {
+            tags.forEach(element => {
+                if(element.textContent === tag) {
+                    element.parentElement.parentElement.remove();
+                    tagList = tagList.filter(currentTag => currentTag !== tag);
+                }
+            });
+        }
+       
+    }
+
+
+
+function handleButtonHandler(newCard) {
+                    
+                newCard.querySelector('.handleButton').addEventListener("click", () => {
+                    detailsAssignment.show();
+                    document.getElementById('card-title').innerHTML = newCard.querySelector('.card-full-title').textContent;
+                    document.getElementById('card-text').innerHTML = newCard.querySelector('.assignmentCardAmount').textContent;
+                    document.getElementById('detailsCover').src = newCard.querySelector('.card-img-top').src;
+                    document.getElementById('detailsUsername').innerHTML = "@" + newCard.querySelector('.usernamePlace').textContent.slice(1);
+                    document.getElementById('modalDate').innerHTML = newCard.querySelector('.newModalDate').textContent;
+                    document.getElementById('card-description').innerHTML = newCard.querySelector('.assignmentDescription').textContent;
+
+                    const handleButtons = Array.from(document.getElementsByClassName('handleButton'))
+                    handleButtons.forEach((element, index) => {
+                        if (document.getElementById('profileDetailsUsername').textContent === assignmentList[index].user) {
+                            modalDetailsPfp.src = userPfpURL;
+                        }
+                        else {
+                            modalDetailsPfp.src = newCard.querySelector('.cardPfp').src;
+                        }
+                    });
+                });
+                
+    }
+
+function editButtonHandler(newCard) {
+                newCard.querySelector('.editButton').addEventListener('click', () => {
+                    
+                    editAssignment.show();
+
+                    newAssignmentNameInput.placeholder = newCard.querySelector('.card-full-title').textContent;
+                    newAssignmentPayInput.placeholder = newCard.querySelector('.assignmentCardAmount').textContent;
+                    newAssignmentDescription.placeholder = newCard.querySelector('.assignmentDescription').textContent;
+                    editCoverImage.style.backgroundImage = `url(${newCard.querySelector('.card-img-top').src})`;
+                    
+                    let currentCardID = 
+                    newAssignmentDescription.placeholder = newCard.querySelector('#cardID').textContent;
+            
+                    editCoverInput.onchange = function () {
+                        const newCoverFile = editCoverInput.files[0];
+                        if (newCoverFile) {
+                            const newCoverUrl = URL.createObjectURL(newCoverFile);
+                            coverPicURL = newCoverUrl;
+                            editCoverImage.style.backgroundImage = `url(${newCoverUrl})`;
+                        }
+                    };
+
+                    editSubmit.onclick = function (event) {
+                        event.preventDefault();
+                        const newName = newAssignmentNameInput.value || assignmentNameInput.value;
+                        const newPay = newAssignmentPayInput.value || assignmentPaymentInput.value;
+                        const newCover = coverPicURL;
+                        const newDesc = newAssignmentDescription.value || assignmentDescription.value;
+
+                        assignmentList[currentCardID] = { name: newName, price: newPay, cover: newCover, user: username, id: currentCardID, desc: newDesc };
+
+                        let dotsEdit = "";
+                        if (newName.length > wordLimit) {
+                            dotsEdit = "..."
+                        }
+
+                        newCard.querySelector('.card-full-title').textContent = newName;
+                        newCard.querySelector('.card-title').textContent = newName.slice(0, wordLimit) + dotsEdit;
+                        newCard.querySelector('.assignmentCardAmount').textContent = 'NRS ' + newPay;
+                        newCard.querySelector('.card-img-top').src = newCover;
+                        newCard.querySelector('.assignmentDescription').textContent = newDesc;
+
+                        editAssignment.hide();
+                        const updatedData = {
+                            name: newName,
+                            price: newPay,
+                            cover: newCover,
+                            desc: newDesc,
+                        };
+
+                        const cardID = newCard.querySelector('#cardID').textContent.trim(); // Ensure cardID is extracted correctly
+                        console.log(cardID)
+                        fetchForEdit(cardID, updatedData);
+
+
+                    };
+
+                    assignmentDeleter.addEventListener('click', () => {
+                                    editAssignment.hide();
+                                    deleteTag(newCard.querySelector('.assignmentTag').textContent);
+                                    newCard.remove();
+                                    recentHeaderFunction();
+                                    fetchForDelete(newCard);
+                        });
+
+                    
+                });
+    }
+
+ function fetchForEdit(cardID, updatedData) {
+
+                                fetch(`/api/assignments/${cardID}`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(updatedData),
+                                })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Failed to update assignment');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log('Assignment updated: ', data);
+                                    })
+                                    .catch(error => {
+                                        console.error('Error editing assignment: ', error);
+                                    });
+
+                        }
+
+function fetchForDelete(newCard){
+        const cardID = newCard.querySelector('#cardID').textContent.trim();  // Assuming this gets the correct cardID
+
+        fetch(`/api/assignments/${cardID}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        })
+        .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to delete assignment');
+        }
+        return response.json();
+        })
+        .then(data => {
+        console.log('Assignment deleted: ', data);
+        })
+        .catch(error => {
+        console.error('Error deleting assignment: ', error);
+        });
+
+}
+
+function tagCreator(currentTag) {
+
+            let tagExists = false;
+                    
+            document.querySelectorAll('.tagElement').forEach(tag => {
+                if(tag.textContent === currentTag)
+                {
+                        tagExists = true;
+                }
+            })
+
+            if(!tagExists){
+
+                    tagsContainter.append(createTag(currentTag));
+                            
+                    const tagElements = document.querySelectorAll('.tagElement');
+                    const clickCounts = {};
+
+                    tagElements.forEach((tagElement, index) => {
+                    clickCounts[index] = 0;
+
+                    tagElement.addEventListener('click', (event) => {
+                                    
+                                    clickCounts[index]++;
+
+                                    if (clickCounts[index] % 2 === 1) {
+                                        activeIndicator(event.currentTarget);
+                                    } else {
+                                        inactiveIndicator(event.currentTarget);
+                                    }
+                                });
+                    });
+
+            }
+}
 
 
     function activeIndicator(t) {
@@ -245,8 +505,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         let currentDate = formatDate();
-
-        document.getElementsByClassName('recentHeader')[0].innerHTML = "Recently Added";
+        
+      
+        
 
         if (assignmentNameInput.value.length < 1 || assignmentPaymentInput.value <= 1) {
             assignmentHelp.innerHTML = `Fill in the details.`;
@@ -265,25 +526,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
 
-                    if (tagFlag === 0) {
-                        tagsContainter.append(createTag(currentTag));
-                        
-                        const tagElements = document.querySelectorAll('.tagElement');
-                        const clickCounts = {};
+                    if (tagFlag === 0) 
+                    {
+                        tagCreator(currentTag);
 
-                        tagElements.forEach((tagElement, index) => {
-                            clickCounts[index] = 0;
-
-                            tagElement.addEventListener('click', (event) => {
-                                clickCounts[index]++;
-
-                                if (clickCounts[index] % 2 === 1) {
-                                    activeIndicator(event.currentTarget);
-                                } else {
-                                    inactiveIndicator(event.currentTarget);
-                                }
-                            });
-                        });
                     }
                 }
             });
@@ -292,12 +538,14 @@ document.addEventListener("DOMContentLoaded", function () {
             assignmentHelp.style.color = 'grey';
         
             userPfpURL = coverPfpURL;
-    
-            const newCard = createChild(assignmentPaymentInput.value, assignmentNameInput.value, coverPicURL, username, initialCardID, currentDate, assignmentDescription.value, userPfpURL, currentTag);
+
+            const newCard = createChild(assignmentPaymentInput.value, assignmentNameInput.value, coverPicURL, username, lastCardID + 1, currentDate, assignmentDescription.value, userPfpURL, currentTag);
+            
             cardContainer.appendChild(newCard);
 
             const editButtons = Array.from(document.getElementsByClassName('editButton'))
             editButtons.forEach((element, index) => {
+            recentHeaderFunction();
                 if (username == assignmentList[index].user) {
                     element.style.display = "block";
                 }
@@ -309,75 +557,48 @@ document.addEventListener("DOMContentLoaded", function () {
             const currentCardID = initialCardID;
             initialCardID++;
 
-            newCard.querySelector('.handleButton').addEventListener("click", () => {
-                detailsAssignment.show();
-                document.getElementById('card-title').innerHTML = newCard.querySelector('.card-full-title').textContent;
-                document.getElementById('card-text').innerHTML = newCard.querySelector('.assignmentCardAmount').textContent;
-                document.getElementById('detailsCover').src = newCard.querySelector('.card-img-top').src;
-                document.getElementById('detailsUsername').innerHTML = "@" + newCard.querySelector('.usernamePlace').textContent.slice(1);
-                document.getElementById('modalDate').innerHTML = newCard.querySelector('.newModalDate').textContent;
-                document.getElementById('card-description').innerHTML = newCard.querySelector('.assignmentDescription').textContent;
-
-                const handleButtons = Array.from(document.getElementsByClassName('handleButton'))
-                handleButtons.forEach((element, index) => {
-                    if (document.getElementById('profileDetailsUsername').textContent === assignmentList[index].user) {
-                        modalDetailsPfp.src = userPfpURL;
-                    }
-                    else {
-                        modalDetailsPfp.src = newCard.querySelector('.cardPfp').src;
-                    }
-                });
-            });
-
-            newCard.querySelector('.editButton').addEventListener('click', () => {
-                
-                editAssignment.show();
-
-                newAssignmentNameInput.placeholder = newCard.querySelector('.card-full-title').textContent;
-                newAssignmentPayInput.placeholder = newCard.querySelector('.assignmentCardAmount').textContent;
-                newAssignmentDescription.placeholder = newCard.querySelector('.assignmentDescription').textContent;
-                editCoverImage.style.backgroundImage = `url(${newCard.querySelector('.card-img-top').src})`;
-        
-                editCoverInput.onchange = function () {
-                    const newCoverFile = editCoverInput.files[0];
-                    if (newCoverFile) {
-                        const newCoverUrl = URL.createObjectURL(newCoverFile);
-                        coverPicURL = newCoverUrl;
-                        editCoverImage.style.backgroundImage = `url(${newCoverUrl})`;
-                    }
-                };
-
-                editSubmit.onclick = function (event) {
-                    event.preventDefault();
-                    const newName = newAssignmentNameInput.value || assignmentNameInput.value;
-                    const newPay = newAssignmentPayInput.value || assignmentPaymentInput.value;
-                    const newCover = coverPicURL;
-                    const newDesc = newAssignmentDescription.value || assignmentDescription.value;
-
-                    assignmentList[currentCardID] = { name: newName, price: newPay, cover: newCover, user: username, id: currentCardID, desc: newDesc };
-
-                    let dotsEdit = "";
-                    if (newName.length > wordLimit) {
-                        dotsEdit = "..."
-                    }
-
-                    newCard.querySelector('.card-full-title').textContent = newName;
-                    newCard.querySelector('.card-title').textContent = newName.slice(0, wordLimit) + dotsEdit;
-                    newCard.querySelector('.assignmentCardAmount').textContent = 'NRS ' + newPay;
-                    newCard.querySelector('.card-img-top').src = newCover;
-                    newCard.querySelector('.assignmentDescription').textContent = newDesc;
-
-                    editAssignment.hide();
-                };
-
-                assignmentDeleter.onclick = function (event) {
-                    editAssignment.hide();
-                    newCard.remove();
-                }
-            });
+            
+            handleButtonHandler(newCard);
+            editButtonHandler(newCard);
 
             addAssignment.hide();
+
+            // Fetch API using POST method for POSTING(SAVING) new assignment
+
+            let newAssignmentName = assignmentNameInput.value;
+            let newAssignmentPrice = assignmentPaymentInput.value;
+            let newAssignmentDescription = assignmentDescription.value;
+
+            fetch('/api/assignments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: newAssignmentName,
+                        price: newAssignmentPrice,
+                        cover: coverPicURL,
+                        user: username,
+                        cardID: (lastCardID),
+                        date: currentDate,
+                        desc: newAssignmentDescription,
+                        pfp: userPfpURL,
+                        tag: currentTag
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.assignment) {
+                        console.log('Assignment created: ', data.assignment);
+                    }
+                })
+                .catch(error => {
+                    console.log('Error: ', error);
+                });
+            // End of else for newAsgn submission
         }
+
+        
     });
 
     profileSave.addEventListener('click', function (e) {

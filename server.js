@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Assignment = require('./models/Assignments');
+const User = require('./models/Users');
 
 app.use(express.json());
 
@@ -144,4 +145,67 @@ app.delete('/api/assignments/:cardID', async (req, res) => {
       error,
     });
   }
+});
+
+// Route to handle saving user data
+app.put('/api/users', async (req, res) => {
+    const { username } = req.params;
+    const updatedData = req.body;
+
+    try {
+        const updatedUser = await User.findOneAndUpdate({ loggedIn: true }, updatedData, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'User data updated successfully!', updatedUser });
+    } catch (error) {
+        console.error('Error updating user data:', error);
+        res.status(500).json({ message: 'Failed to update user data' });
+    }
+});
+
+// GET route to retrieve logged-in user data
+app.get('/api/users/loggedin', async (req, res) => {
+    try {
+        const loggedInUser = await User.findOne({ loggedIn: true });
+
+        if (!loggedInUser) {
+            return res.status(404).json({ message: 'No logged-in user found' });
+        }
+
+        res.status(200).json(loggedInUser);
+    } catch (error) {
+        console.error('Error retrieving logged-in user data:', error);
+        res.status(500).json({ message: 'Failed to retrieve user data' });
+    }
+});
+
+// POST route to insert a default user if the database is empty
+app.post('/api/users', async (req, res) => {
+    try {
+        const userCount = await User.countDocuments();
+        console.log('User count:', userCount);
+
+        if (userCount === 0) {
+            const defaultUser = {
+                name: "Default",
+                about: "I am so cool",
+                username: "username",
+                loggedIn: true
+            };
+
+            const newUser = new User(defaultUser);
+            await newUser.save();
+            console.log('New user saved:', newUser);
+            return res.status(201).json({ message: 'Default user created!', newUser });
+        } else {
+            console.log('User already exists');
+            return res.status(400).json({ message: 'User already exists in the database.' });
+        }
+    } catch (error) {
+        console.error('Error inserting default user:', error);
+        res.status(500).json({ message: 'Failed to insert default user' });
+    }
 });

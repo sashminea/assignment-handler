@@ -103,13 +103,105 @@ document.addEventListener("DOMContentLoaded", function () {
                 assignment.tag && tagCreator(assignment.tag);
                 console.log();
                 lastCardID = assignments.length; 
-
+                
                 recentHeaderFunction();
             });
         })
         .catch(error => {
             console.log('Error fetching assignments: ', error);
         })
+
+    // Fetch ends
+
+function fetchLoggedInUserData() {
+    fetch('/api/users/loggedin')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Logged-in user data:', data);
+            updateUser(data);
+        })
+        .catch((error) => {
+            console.error('Error fetching logged-in user data:', error);
+        });
+}
+
+fetchLoggedInUserData();
+
+// Function to create a default user
+        async function createDefaultUser() {
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log(data.message); // User created successfully
+                } else {
+                    console.error(data.message); // Handle error response
+                }
+            } catch (error) {
+                console.error('Error:', error); // Handle fetch error
+            }
+        }
+
+        // Call the function when the script loads
+        createDefaultUser();
+
+function updateUser(data) {
+    const { dataName, dataAbout, dataUsername } = {
+    dataName: data.name,
+    dataAbout: data.about,
+    dataUsername: data.username
+    };
+
+    usernamePlace.innerHTML = "@" + dataUsername;
+    namePlace.innerHTML = dataName;
+    profileAbout.placeholder = dataAbout;
+    profileDetailsName.innerHTML = dataName;
+    profileDetailsUsername.innerHTML = "@" + dataUsername;
+}
+
+
+function generateUserJson() {
+    const extractedName = namePlace.textContent;
+    const extractedUsername = usernamePlace.textContent.replace('@', '');
+    const extractedAbout = about || "";
+    const loggedInStatus = true;
+
+    const userJson = {
+        name: extractedName,
+        about: extractedAbout,
+        username: extractedUsername,
+        loggedIn: loggedInStatus
+    };
+
+    return userJson;
+}
+
+function sendUserData(username) {
+    const userData = generateUserJson();
+    console.log(username);
+    fetch('/api/users', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
 
     function addTag() {
         tagsNo++;
@@ -455,7 +547,6 @@ function editButtonHandler(newCard) {
                 }
     }
 
-
     function activeIndicator(t) {
         t.classList.add('active');
         hideAllElseCards(t.innerHTML);
@@ -608,17 +699,38 @@ function editButtonHandler(newCard) {
     });
 
     profileSave.addEventListener('click', function (e) {
-        usernamePlace.innerHTML = '@' + profileUserName.value;
-        namePlace.innerHTML = profileName.value;
-        username = profileUserName.value;
-        profileDetailsUsername.innerHTML = '@' + profileUserName.value;
-        name = profileName.value;
-        about = profileAbout.value;
+        
+        usernamePlace.innerHTML = profileUserName.value.trim() !== ""
+            ? '@' + profileUserName.value
+            : usernamePlace.textContent;
+
+        namePlace.innerHTML = profileName.value.trim() !== ""
+            ? profileName.value
+            : namePlace.textContent;
+
+        username = profileUserName.value.trim() !== ""
+            ? profileUserName.value
+            : usernamePlace.textContent.replace('@', ''); // Remove '@' from the text content
+
+        profileDetailsUsername.innerHTML = profileUserName.value.trim() !== ""
+            ? '@' + profileUserName.value
+            : usernamePlace.textContent;
+
+        name = profileName.value.trim() !== ""
+            ? profileName.value
+            : namePlace.textContent;
+
+        about = profileAbout.value.trim() !== ""
+            ? profileAbout.value
+            : about; // If there's no placeholder for 'about', keep the old value.
+
+
         profileSettings.hide();
 
         navPfp.src = coverPfpURL;
         detailsPfp.src = coverPfpURL;
         userPfpURL = coverPfpURL;
+        sendUserData(username);
 
         const editButtons = Array.from(document.getElementsByClassName('editButton'))
         editButtons.forEach((element, index) => {

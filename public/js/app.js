@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </span>
                 <span class="fw-normal fs-6">
                 <span class="usernamePlace">${usernamePlace.innerHTML}</span><br>
-                <span class="assignmentCardAmount">NRS ${AssValue}</span>
+                <span class="assignmentCardAmount">NRS <span class="assignmentPriceValue">${AssValue}</span></span>
                 </span>
                 </p>
                 <span id="cardID" style="display: none;">${initialCardID}</span>
@@ -240,10 +240,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function deleteTag(tag) {
 
         let tagCount = 0;
-        // tag is the tag which is checked for deletion
-        // tagCount is the no of assignmentCards that has the tag
-
-        // if the tagCount is 0 we delete the tag element
 
         console.log(tag);
 
@@ -269,7 +265,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
        
     }
-
 
 
 function handleButtonHandler(newCard) {
@@ -306,8 +301,7 @@ function editButtonHandler(newCard) {
                     newAssignmentDescription.placeholder = newCard.querySelector('.assignmentDescription').textContent;
                     editCoverImage.style.backgroundImage = `url(${newCard.querySelector('.card-img-top').src})`;
                     
-                    let currentCardID = 
-                    newAssignmentDescription.placeholder = newCard.querySelector('#cardID').textContent;
+                    let currentCardID = newCard.querySelector('#cardID').textContent;
             
                     editCoverInput.onchange = function () {
                         const newCoverFile = editCoverInput.files[0];
@@ -320,10 +314,22 @@ function editButtonHandler(newCard) {
 
                     editSubmit.onclick = function (event) {
                         event.preventDefault();
-                        const newName = newAssignmentNameInput.value || assignmentNameInput.value;
-                        const newPay = newAssignmentPayInput.value || assignmentPaymentInput.value;
+                                                
+                        // Check if the new input values are not empty, otherwise use the old placeholders.
+                        const newName = newAssignmentNameInput.value.trim() !== "" 
+                            ? newAssignmentNameInput.value 
+                            : newCard.querySelector('.card-full-title').textContent;
+
+                        const newPay = newAssignmentPayInput.value.trim() !== "" 
+                            ? newAssignmentPayInput.value 
+                            : newCard.querySelector('.assignmentPriceValue').textContent;
+
+                        const newDesc = newAssignmentDescription.value.trim() !== "" 
+                            ? newAssignmentDescription.value 
+                            : newCard.querySelector('.assignmentDescription').textContent;
+
+
                         const newCover = coverPicURL;
-                        const newDesc = newAssignmentDescription.value || assignmentDescription.value;
 
                         assignmentList[currentCardID] = { name: newName, price: newPay, cover: newCover, user: username, id: currentCardID, desc: newDesc };
 
@@ -347,7 +353,7 @@ function editButtonHandler(newCard) {
                         };
 
                         const cardID = newCard.querySelector('#cardID').textContent.trim(); // Ensure cardID is extracted correctly
-                        console.log(cardID)
+                        
                         fetchForEdit(cardID, updatedData);
 
 
@@ -365,89 +371,89 @@ function editButtonHandler(newCard) {
                 });
     }
 
- function fetchForEdit(cardID, updatedData) {
+    function fetchForEdit(cardID, updatedData) {
 
-                                fetch(`/api/assignments/${cardID}`, {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify(updatedData),
-                                })
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            throw new Error('Failed to update assignment');
-                                        }
-                                        return response.json();
+                                    fetch(`/api/assignments/${cardID}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify(updatedData),
                                     })
-                                    .then(data => {
-                                        console.log('Assignment updated: ', data);
-                                    })
-                                    .catch(error => {
-                                        console.error('Error editing assignment: ', error);
-                                    });
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Failed to update assignment');
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            console.log('Assignment updated: ', data);
+                                        })
+                                        .catch(error => {
+                                            console.error('Error editing assignment: ', error);
+                                        });
 
-                        }
+                            }
 
-function fetchForDelete(newCard){
-        const cardID = newCard.querySelector('#cardID').textContent.trim();  // Assuming this gets the correct cardID
+    function fetchForDelete(newCard){
+            const cardID = newCard.querySelector('#cardID').textContent.trim();  // Assuming this gets the correct cardID
 
-        fetch(`/api/assignments/${cardID}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        })
-        .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to delete assignment');
-        }
-        return response.json();
-        })
-        .then(data => {
-        console.log('Assignment deleted: ', data);
-        })
-        .catch(error => {
-        console.error('Error deleting assignment: ', error);
-        });
-
-}
-
-function tagCreator(currentTag) {
-
-            let tagExists = false;
-                    
-            document.querySelectorAll('.tagElement').forEach(tag => {
-                if(tag.textContent === currentTag)
-                {
-                        tagExists = true;
-                }
+            fetch(`/api/assignments/${cardID}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             })
-
-            if(!tagExists){
-
-                    tagsContainter.append(createTag(currentTag));
-                            
-                    const tagElements = document.querySelectorAll('.tagElement');
-                    const clickCounts = {};
-
-                    tagElements.forEach((tagElement, index) => {
-                    clickCounts[index] = 0;
-
-                    tagElement.addEventListener('click', (event) => {
-                                    
-                                    clickCounts[index]++;
-
-                                    if (clickCounts[index] % 2 === 1) {
-                                        activeIndicator(event.currentTarget);
-                                    } else {
-                                        inactiveIndicator(event.currentTarget);
-                                    }
-                                });
-                    });
-
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete assignment');
             }
-}
+            return response.json();
+            })
+            .then(data => {
+            console.log('Assignment deleted: ', data);
+            })
+            .catch(error => {
+            console.error('Error deleting assignment: ', error);
+            });
+
+    }
+
+    function tagCreator(currentTag) {
+
+                let tagExists = false;
+                        
+                document.querySelectorAll('.tagElement').forEach(tag => {
+                    if(tag.textContent === currentTag)
+                    {
+                            tagExists = true;
+                    }
+                })
+
+                if(!tagExists){
+
+                        tagsContainter.append(createTag(currentTag));
+                                
+                        const tagElements = document.querySelectorAll('.tagElement');
+                        const clickCounts = {};
+
+                        tagElements.forEach((tagElement, index) => {
+                        clickCounts[index] = 0;
+
+                        tagElement.addEventListener('click', (event) => {
+                                        
+                                        clickCounts[index]++;
+
+                                        if (clickCounts[index] % 2 === 1) {
+                                            activeIndicator(event.currentTarget);
+                                        } else {
+                                            inactiveIndicator(event.currentTarget);
+                                        }
+                                    });
+                        });
+
+                }
+    }
 
 
     function activeIndicator(t) {

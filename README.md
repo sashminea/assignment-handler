@@ -32,14 +32,33 @@ This is your all-in-one app for handling assignments like a pro. 💼 From addin
    npm install
    ```
 
-### 3. Run the app locally:  
+### 3. Set up your environment:  
+   Create a `.env` file in the root of your project and add your MongoDB connection URI:
+   ```
+   MONGO_URI=your_mongodb_connection_string
+   PORT=3000
+   ```
+
+### 4. Run the app locally:  
    To start the server using Express, run:
    ```bash
    node server.js
    ```
 
-### 4. Open in browser:  
+### 5. Open in browser:  
    Navigate to [http://localhost:3000](http://localhost:3000) in your browser to view the app.
+
+### 6. API Endpoints:
+   - **POST** `/api/assignments`: Create a new assignment.
+   - **GET** `/api/assignments`: Fetch all assignments.
+   - **PUT** `/api/assignments/:cardID`: Update an existing assignment by `cardID`.
+   - **DELETE** `/api/assignments/:cardID`: Delete an assignment by `cardID`.
+
+---
+
+### Important Notes:
+- Ensure your MongoDB database is running and accessible.
+- The server uses Express.js to serve static files and handle API requests dynamically with Fetch API on the frontend.
 
 ---
 

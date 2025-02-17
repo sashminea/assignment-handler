@@ -4,6 +4,22 @@ This is your all-in-one app for handling assignments like a pro. 💼 From addin
 
 ---
 
+## 📸 Screenshots
+
+### 🗒️ Added Tags (10/06)
+![Tags](https://i.imgur.com/kgZE9yQ.png)
+
+### 💻 New UI (09/23)
+![Assignment Details](https://i.postimg.cc/dVMQmMsN/image.png)
+
+### 📒 Adding Assignment
+![Adding Assignment](https://i.ibb.co/0Qy2nNG/image.png)
+
+### 📝 Edit Assignment
+![Edit Assignment](https://i.ibb.co/QcJjbNW/image.png)
+
+---
+
 ## 💡 Features
 
 - **Add Assignments**: Need to throw in a new task? Use our quick and easy modal to add assignments with a description, payment amount, and a cool cover image. 💸
@@ -91,21 +107,6 @@ This is your all-in-one app for handling assignments like a pro. 💼 From addin
 
 ---
 
-## 📸 Screenshots
-
-### 🗒️ Added Tags (10/06)
-![Tags](https://i.imgur.com/kgZE9yQ.png)
-
-### 💻 New UI (09/23)
-![Assignment Details](https://i.postimg.cc/dVMQmMsN/image.png)
-
-### 📒 Adding Assignment
-![Adding Assignment](https://i.ibb.co/0Qy2nNG/image.png)
-
-### 📝 Edit Assignment
-![Edit Assignment](https://i.ibb.co/QcJjbNW/image.png)
-
----
 
 ## 👥 Contributing
 
